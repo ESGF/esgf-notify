@@ -1,0 +1,3 @@
+SECURITY_SCHEMA = 'esgf_security'
+NOTIFY_SCHEMA = 'esgf_notify'
+SCHEMAS = [SECURITY_SCHEMA, NOTIFY_SCHEMA]
