@@ -31,7 +31,7 @@ class Query(object):
 
     def getMessages(self, sub):
 
-        # Build query for each subscriber
+    7    # Build query for each subscriber
         # This is putting it into Solr's query format
         qualifiers = [
             "%s:(%s)" % (field, " OR ".join(sub.fields[field]))

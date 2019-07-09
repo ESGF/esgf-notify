@@ -5,7 +5,7 @@ from sqlalchemy.orm import relationship, backref
 from db.schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
 from db.models.base import Base
 
-class User(Base):
+class ESGFUser(Base):
 
     # Real Table definitions
     __tablename__ = 'user'
@@ -59,8 +59,8 @@ class User(Base):
 
     # For the sqlAlchemy's sake, does not effect table creation
     subscription = relationship(
-        "Subscription",
-        backref="%s.subscription" % NOTIFY_SCHEMA
+        "ESGFSubscribers",
+        back_populates='users'
     )
 
 class Group(Base):

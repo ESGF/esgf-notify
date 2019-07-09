@@ -4,67 +4,31 @@ from sqlalchemy.orm import relationship, backref
 
 from db.schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
 from db.models.base import Base
+from db.models.security 
 
-class Subscription(Base):
+class ESGFSubscribers(Base):
+    """ Class that represents the 'esgf_subscription.subscribers' table in the ESGF database."""
 
-    # Real Table definitions
-    __tablename__ = 'subscription'
-    __table_args__ = {'schema': NOTIFY_SCHEMA}
+    __tablename__ = 'subscribers'
+    __table_args__ = { 'schema': 'esgf_subscription'}
 
-    id = Column(
-        Integer,
-        primary_key=True,
-        autoincrement=True
-    )
-    user_id = Column(
-        Integer,
-        ForeignKey(
-            '%s.user.id' % SECURITY_SCHEMA,
-            ondelete='CASCADE'
-        )
-    )
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('esgf_security.user.id'))
+    period = Column(Integer)  # ForeignKey (Q: do we want to define this?)
 
-    # For the sqlAlchemy's sake, does not effect table creation
-    user = relationship(
-        "User",
-        backref=backref("%s.subscription" % NOTIFY_SCHEMA, passive_deletes=True)
-    )
-    constraint = relationship(
-        "Constraint",
-        backref="%s.constraint" % NOTIFY_SCHEMA
-    )
+    terms = relationship("ESGFTerms", back_populates="subscriber", passive_deletes=True, cascade='all, delete, delete-orphan')    
 
-class Constraint(Base):
+    users = relationship("ESGFUser", back_populates='subscription')
 
-    # Real Table definitions
-    __tablename__ = 'constraint'
-    __table_args__ = {'schema': NOTIFY_SCHEMA}
+class ESGFTerms(Base):
+    """ Class that represents the 'esgf_subscription.keys' table in the ESGF database."""
 
-    # id = Column(Integer,  autoincrement=True)
-    sub_id = Column(
-        Integer,
-        ForeignKey(
-            '%s.subscription.id' % NOTIFY_SCHEMA,
-            ondelete='CASCADE'
-        ),
-        primary_key=True
-    )
-    field = Column(
-        String(200),
-        nullable=False,
-        primary_key=True
-    )
-    value = Column(
-        String(200),
-        nullable=False,
-        primary_key=True
-    )
+    __tablename__ = 'terms'
+    __table_args__ = { 'schema': 'esgf_subscription'}
+  
+    id = Column(Integer, primary_key=True)
+    subscribers_id = Column(Integer, ForeignKey('esgf_subscription.subscribers.id', ondelete="CASCADE")) # FK
+    keyname = Column(String)
+    valuename = Column(String)
 
-    # For the sqlAlchemy's sake, does not effect table creation
-    subscription = relationship(
-        "Subscription",
-        backref=backref(
-            "%s.constraint" % NOTIFY_SCHEMA,
-            passive_deletes=True
-        )
-    )
+    subscriber = relationship("ESGFSubscribers", back_populates='terms') 
