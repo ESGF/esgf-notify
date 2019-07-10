@@ -19,7 +19,7 @@ class QueryEngine():
 		self.query_res = session.query(ESGFSubscribers,ESGFUser.email,ESGFTerms.keyname,ESGFTerms.valuename).join(ESGFUser).join(ESGFTerms)
 		session.close()
 
-	def get_rows():
+	def get_rows(self):
 
 		result_dict = {}
 		last_id = -1
@@ -27,8 +27,9 @@ class QueryEngine():
 		for x in self.query_res:
 
 			if not last_id 	== x[0].id:
-				if last_id > -1
-					yield (x[1], result_dict)
+				if last_id > -1:
+					yield (email, result_dict)
+					result_dict={}
 			last_id = x[0].id
 			result_dict[x[2]] = x[3]
 			email=x[1]
@@ -38,9 +39,6 @@ class QueryEngine():
 
 qe = QueryEngine('postgresql://dbsuper:esgrocks@localhost/esgcet')
 
-for i, x in enumerate qe.get_rows():
-
-	print i + 1, str(x)
 
 
 

@@ -5,6 +5,8 @@ from logging.handlers import RotatingFileHandler
 from notify.sub import Sub
 from notify.query import Query
 
+from db import QueryEngine
+
 import json
 import random
 import time
@@ -19,18 +21,16 @@ def main():
         format='%(asctime)s %(name)s %(levelname)s:%(message)s',
         handlers=[rotater]
     )
-    nQs = 1
-    variants = ['r1i1p1f1', 'r1i1p1f2', 'r3i1p1f1', 'r8i1p1f1']
+
+    qe = QueryEngine('postgresql://dbsuper:esgrocks@localhost/esgcet')
+  
     my_subs = [
         Sub(
-            str(i), 
-            {
-                'project':['CMIP6', 'CORDEX'],
-                'variant_label': random.sample(variants, k=random.randint(1, len(variants)-1))
-            }
+            i, x[1], x[0]
         )
-        for i in range(nQs)
+        for i,x in enumerate,qe.get_rows()
     ]
+
     indexNodes = [
         # 'esg-dn1.nsc.liu.se',
         # 'esg.pik-potsdam.de',
@@ -49,8 +49,8 @@ def main():
         my_query = Query(indexNode)
         for sub in my_subs:
             res = my_query.getMessages(sub)
-            print(json.dumps(res, indent=2, sort_keys=True))
+            print json.dumps(res, indent=2, sort_keys=True)
         dur = time.time() - start
         avg = dur/nQs
-        print(indexNode, f'total: {dur}, avg: {avg}')
+        print indexNode, 'total: {dur}, avg: {avg}'
 main()
