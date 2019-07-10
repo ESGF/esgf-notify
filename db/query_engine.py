@@ -3,9 +3,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-from db.models.notify import ESGFSubscribers, ESGFTerms
-from db.models.security import ESGFUser
-from
+from models.notify import ESGFSubscribers, ESGFTerms
+from models.security import ESGFUser
+
 
 class QueryEngine():
 
@@ -18,11 +18,11 @@ class QueryEngine():
 
 		session = self.Session()
 
-		res = session.query(Subscribers,User.email,Terms).join(User).join(Terms)
+		res = session.query(ESGFSubscribers,ESGFUser.email,ESGFTerms.keyname,ESGFTerms.valuename).join(ESGFUser).join(ESGFTerms)
 
 
 		for x in res:
-			print x.email, x.keyname, x.valuename
+			print str(x)
 
 
 qe = QueryEngine('postgresql://dbsuper:esgrocks@localhost/esgcet')

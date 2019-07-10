@@ -2,9 +2,9 @@
 from sqlalchemy import Column, Integer, Sequence, String, Date, Float, ForeignKey
 from sqlalchemy.orm import relationship, backref
 
-from db.schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
-from db.models.base import Base
-from db.models.security 
+from schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
+from models.base import Base
+
 
 class ESGFSubscribers(Base):
     """ Class that represents the 'esgf_subscription.subscribers' table in the ESGF database."""

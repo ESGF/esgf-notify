@@ -2,8 +2,8 @@
 from sqlalchemy import Column, Integer, Sequence, String, Date, Float, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship, backref
 
-from db.schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
-from db.models.base import Base
+from schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
+from base import Base
 
 class ESGFUser(Base):
 
@@ -81,45 +81,3 @@ class Role(Base):
     name = Column(String(100), unique=True, nullable=False)
     description = Column(Text, nullable=False)
 
-class Permission(Base):
-    __tablename__ = 'permission'
-    __table_args__ = {'schema': SECURITY_SCHEMA}
-
-    user_id = Column(
-        Integer,
-        ForeignKey(
-            '%s.user.id' % SECURITY_SCHEMA,
-            ondelete='CASCADE'
-        ),
-        primary_key=True
-    )
-    group_id = Column(
-        Integer,
-        ForeignKey(
-            '%s.group.id' % SECURITY_SCHEMA,
-            ondelete='CASCADE'
-        ),
-        primary_key=True
-    )
-    role_id = Column(
-        Integer,
-        ForeignKey(
-            '%s.role.id' % SECURITY_SCHEMA,
-            ondelete='CASCADE'
-        ),
-        primary_key=True
-    )
-
-    # For the sqlAlchemy's sake, does not effect table creation
-    user = relationship(
-        "User",
-        backref=backref("%s.permission" % SECURITY_SCHEMA, passive_deletes=True)
-    )
-    group = relationship(
-        "User",
-        backref=backref("%s.permission" % SECURITY_SCHEMA, passive_deletes=True)
-    )
-    role = relationship(
-        "User",
-        backref=backref("%s.permission" % SECURITY_SCHEMA, passive_deletes=True)
-    )
