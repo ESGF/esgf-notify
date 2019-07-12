@@ -3,8 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-from models.notify import ESGFSubscribers, ESGFTerms
-from models.security import ESGFUser
+from db.models.notify import ESGFSubscribers, ESGFTerms
+from db.models.security import ESGFUser
 
 
 class QueryEngine():

@@ -2,8 +2,8 @@
 from sqlalchemy import Column, Integer, Sequence, String, Date, Float, ForeignKey, Text, Boolean
 from sqlalchemy.orm import relationship, backref
 
-from schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
-from base import Base
+from db.schema import NOTIFY_SCHEMA, SECURITY_SCHEMA
+from db.models.base import Base
 
 class ESGFUser(Base):
 

@@ -1,11 +1,10 @@
-
 import logging
 from logging.handlers import RotatingFileHandler
 
 from notify.sub import Sub
 from notify.query import Query
 
-from db import QueryEngine
+from db.query_engine import QueryEngine
 
 import json
 import random
@@ -28,7 +27,7 @@ def main():
         Sub(
             i, x[1], x[0]
         )
-        for i,x in enumerate,qe.get_rows()
+        for i,x in enumerate(qe.get_rows())
     ]
 
     indexNodes = [
@@ -49,8 +48,8 @@ def main():
         my_query = Query(indexNode)
         for sub in my_subs:
             res = my_query.getMessages(sub)
-            print json.dumps(res, indent=2, sort_keys=True)
+            print (json.dumps(res, indent=2, sort_keys=True))
         dur = time.time() - start
         avg = dur/nQs
-        print indexNode, 'total: {dur}, avg: {avg}'
+        print (indexNode, 'total: {dur}, avg: {avg}')
 main()
