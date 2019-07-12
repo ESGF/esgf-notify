@@ -31,7 +31,7 @@ class QueryEngine():
 					yield (email, result_dict)
 					result_dict={}
 			last_id = x[0].id
-			result_dict[x[2]] = x[3]
+			result_dict[x[2]] = x[3].split(',')
 			email=x[1]
 
 		yield (email, result_dict)

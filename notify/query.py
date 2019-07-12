@@ -55,13 +55,13 @@ class Query(object):
         fq = 'type:Dataset AND replica:False AND _timestamp:[%s TO %s]' % (self.start, self.stop)
         # Simply add the redacted qualifier to see removals
         if removed:
-            fq += ' AND redacted:True'
+            fq += ' AND latest:false'
         params = {
             'q': '*:*',
             'facet': 'true',
             'facet.query': query,
             'fq': fq,
-            'rows': 0,
+#            'rows': 0,
         }
         res = self._query(params)
         # None indicates error

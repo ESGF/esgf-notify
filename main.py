@@ -50,6 +50,6 @@ def main():
             res = my_query.getMessages(sub)
             print (json.dumps(res, indent=2, sort_keys=True))
         dur = time.time() - start
-        avg = dur/nQs
-        print (indexNode, 'total: {dur}, avg: {avg}')
+        avg = dur/len(my_subs)
+        print (indexNode, 'total: {}, avg: {}'.format(dur,avg))
 main()
