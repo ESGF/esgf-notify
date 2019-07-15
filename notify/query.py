@@ -65,11 +65,9 @@ class Query(object):
         if res is None:
             return None
 
-        results = res['facet_counts']['facet_queries']
-        query_used = res['responseHeader']['params']['facet.query']
         self.log.debug('Raw Results: %s', str(res))
         try:
-            return results[query_used]
+            return res['response']['numFound']
         except KeyError:
             self.log.debug('HERE')
             return 0
