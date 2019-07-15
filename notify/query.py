@@ -34,10 +34,10 @@ class Query(object):
         # Build query for each subscriber
         # This is putting it into Solr's query format
         qualifiers = [
-            "%s:(%s)" % (field, " OR ".join(sub.fields[field]))
+            "&fq=%s:%s" % (field, ''.join(sub.fields[field]))
             for field in sub.fields
         ]
-        query = ' AND '.join(qualifiers)
+        query = ''.join(qualifiers)
 
         # Get all the counts
         all_counts = self._counts(query)
@@ -52,17 +52,14 @@ class Query(object):
         return results
 
     def _counts(self, query, removed=False):
-        fq = 'type:Dataset AND replica:False AND _timestamp:[%s TO %s]' % (self.start, self.stop)
+        fq = 'fq=type:Dataset&fq=replica:False&fq=_timestamp:[%s TO %s]' % (self.start, self.stop)
         # Simply add the redacted qualifier to see removals
         if removed:
-            fq += ' AND latest:false'
-        params = {
-            'q': '*:*',
-            'facet': 'true',
-            'facet.query': query,
-            'fq': fq,
+            fq += '&fq=latest:false'
+        params = 
+            'q=*:*&facet=true&facet.field=instance_id' + fq + query
 #            'rows': 0,
-        }
+        
         res = self._query(params)
         # None indicates error
         if res is None:
@@ -80,11 +77,11 @@ class Query(object):
     def _query(self, params):
 
         # Combine parameters
-        params = {**self.defaultParams, **params}
+ #       params = {**self.defaultParams, **params}
         self.log.debug(str(params))
         # Make request/query
         try:
-            r = requests.get(self.solrPath, params=params)
+            r = requests.get(self.solrPath + '?' + params)
             r.raise_for_status()
         except requests.exceptions.RequestException as err:
             self.log.error(str(err))
