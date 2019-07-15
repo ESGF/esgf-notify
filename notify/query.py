@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 import logging
 
 import requests
+from operator import add
+from functools import reduce
 
 class Query(object):
 
@@ -24,20 +26,18 @@ class Query(object):
         now = datetime.utcnow()
         self.stop = now.strftime(dateFormat)
         self.start = (now - timedelta(days=interval)).strftime(dateFormat)
-        self.defaultParams = {
-            'wt': 'json',
-            'shards': shards,
-        }
+        self.defaultParams = '&wt=json&shards=%s' % shards
+        
 
     def getMessages(self, sub):
 
         # Build query for each subscriber
         # This is putting it into Solr's query format
         qualifiers = [
-            "&fq=%s:%s" % (field, ''.join(sub.fields[field]))
+            ["&fq=%s:%s" % (field, value) for value in sub.fields[field]]
             for field in sub.fields
         ]
-        query = ''.join(qualifiers)
+        query = ''.join(reduce(add, qualifiers))
 
         # Get all the counts
         all_counts = self._counts(query)
@@ -52,18 +52,18 @@ class Query(object):
         return results
 
     def _counts(self, query, removed=False):
-        fq = 'fq=type:Dataset&fq=replica:False&fq=_timestamp:[%s TO %s]' % (self.start, self.stop)
+        fq = '&fq=type:Dataset&fq=replica:False&fq=_timestamp:[%s TO %s]' % (self.start, self.stop)
         # Simply add the redacted qualifier to see removals
         if removed:
             fq += '&fq=latest:false'
-        params = 
-            'q=*:*&facet=true&facet.field=instance_id' + fq + query
+        params = 'q=*:*&facet=true' + fq + query
 #            'rows': 0,
         
         res = self._query(params)
         # None indicates error
         if res is None:
             return None
+
 
         self.log.debug('Raw Results: %s', str(res))
         try:
@@ -79,7 +79,7 @@ class Query(object):
         self.log.debug(str(params))
         # Make request/query
         try:
-            r = requests.get(self.solrPath + '?' + params)
+            r = requests.get(self.solrPath + '?' + params + self.defaultParams)
             r.raise_for_status()
         except requests.exceptions.RequestException as err:
             self.log.error(str(err))
