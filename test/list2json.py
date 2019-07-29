@@ -55,7 +55,7 @@ import sys
 
 d = list_to_json(get_rand_lines(sys.stdin, int(sys.argv[1])), 'esgf-test-data.llnl.gov')
 
-if len(sys.argv > 2):
+if len(sys.argv) > 2:
 
 	path_prefix = sys.argv[2]
 
