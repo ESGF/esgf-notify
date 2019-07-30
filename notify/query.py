@@ -22,10 +22,11 @@ class Query(object):
         shards = res['responseHeader']['params']['shards']
 
         # Setup default parameters
-        dateFormat = "%Y-%m-%dT%H:%M:%SZ"
-        now = datetime.utcnow()
-        self.stop = now.strftime(dateFormat)
-        self.start = (now - timedelta(days=interval)).strftime(dateFormat)
+#        dateFormat = "%Y-%m-%dT%H:%M:%SZ"
+#        now = datetime.utcnow()
+        self.start =  'NOW-24DAYS' #now.strftime(dateFormat)
+        self.stop = 'NOW' #(now - timedelta(days=interval)).strftime(dateFormat)
+
         self.defaultParams = '&wt=json&shards=%s' % shards
         
 
@@ -34,29 +35,35 @@ class Query(object):
         # Build query for each subscriber
         # This is putting it into Solr's query format
         qualifiers = [
-            ["&fq=%s:%s" % (field, value) for value in sub.fields[field]]
+            "&fq=%s:(%s)" % (field, ' OR '.join(sub.fields[field]))
             for field in sub.fields
         ]
-        query = ''.join(reduce(add, qualifiers))
+        query = ''.join(qualifiers)
 
         # Get all the counts
-        all_counts = self._counts(query)
+#        removed_counts = self._counts(query, removed=True)
+        all_docs = self._docs(query)
         # Get counts of removed datasets
-        removed_counts = self._counts(query, removed=True)
-        results = {
-            'all': all_counts,
-            'removed': removed_counts,
-            'new': all_counts - removed_counts
-        }
-        self.log.debug("Results: %s", str(results))
+
+        
+        
+
+
+        results = {}
+
         return results
 
-    def _counts(self, query, removed=False):
+    def _docs(self, query, removed=False):
         fq = '&fq=type:Dataset&fq=replica:False&fq=_timestamp:[%s TO %s]' % (self.start, self.stop)
         # Simply add the redacted qualifier to see removals
         if removed:
-            fq += '&fq=latest:false'
-        params = 'q=*:*&facet=true' + fq + query
+            fq += '&fq=latest:False'
+
+        ret_fields = ['master_id', 'version', 'latest', 'retracted']
+
+        fl = '&'.join([ "fl=%s" % x for x in  ret_fields])
+
+        params = 'q=*:*&rows=10000&'+ fl + fq + query
 #            'rows': 0,
         
         res = self._query(params)
@@ -67,7 +74,7 @@ class Query(object):
 
         self.log.debug('Raw Results: %s', str(res))
         try:
-            return res['response']['numFound']
+            return res['response']['docs']
         except KeyError:
             self.log.debug('HERE')
             return 0
