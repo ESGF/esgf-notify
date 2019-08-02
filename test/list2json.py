@@ -46,7 +46,7 @@ def gen_xml(fn, d):
 	f=open(fn,'w')
 	f.write("<doc>\n")
 	for key in d:
-		f.write('  <field name="{}">{}</field>'.format(key, d[key]))
+		f.write('  <field name="{}">{}</field>\n'.format(key, d[key]))
 	f.write("</doc>\n")
 	f.close()
 
