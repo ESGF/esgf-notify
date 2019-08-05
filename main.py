@@ -8,9 +8,12 @@ from db.query_engine import QueryEngine
 
 import json
 import random
-import time
-def main():
-    
+import time, sys
+
+def main(indexNode):
+
+    with f as open('/esg/config/.esg_pg_pass'):
+        dbpass = f.read().rstrip()
 
     # Logging
     filename = 'noti.log'
@@ -21,7 +24,7 @@ def main():
         handlers=[rotater]
     )
 
-    qe = QueryEngine('postgresql://dbsuper:esgrocks@localhost/esgcet')
+    qe = QueryEngine('postgresql://dbsuper:{}@localhost/esgcet'.format(dbpass))
   
     my_subs = [
         Sub(
@@ -29,27 +32,17 @@ def main():
         )
         for i,x in enumerate(qe.get_rows())
     ]
+    start = time.time()
+    my_query = Query(indexNode)
+    for sub in my_subs:
+        res = my_query.getMessages(sub)
+        print (json.dumps(res, indent=2, sort_keys=True))
+    dur = time.time() - start
+    avg = dur/len(my_subs)
+    print (indexNode, 'total: {}, avg: {}'.format(dur,avg))
 
-    indexNodes = [
-        # 'esg-dn1.nsc.liu.se',
-        # 'esg.pik-potsdam.de',
-        # 'esgdata.gfdl.noaa.gov',
-        # 'esgf-data.dkrz.de',
-        # 'esgf-index1.ceda.ac.uk',
-        # 'esgf-index3.ceda.ac.uk',
-        # 'esgf-index4.ceda.ac.uk', 
-        # 'esgf-node.ipsl.upmc.fr',
-        'esgf-node.llnl.gov',
-        # 'esgf.nccs.nasa.gov',
-        # 'esgf.nci.org.au'
-    ]
-    for indexNode in indexNodes:
-        start = time.time()
-        my_query = Query(indexNode)
-        for sub in my_subs:
-            res = my_query.getMessages(sub)
-            print (json.dumps(res, indent=2, sort_keys=True))
-        dur = time.time() - start
-        avg = dur/len(my_subs)
-        print (indexNode, 'total: {}, avg: {}'.format(dur,avg))
-main()
+
+if (len(sys.argv) < 2):
+    print ("missing required indexNode arguement")
+
+main(sys.argv[1])
