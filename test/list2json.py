@@ -33,7 +33,7 @@ def list_to_json(in_arr, node, **kwargs):
 			newvers = int(d['version'][1:]) + 1 
 			d['version'] = newvers
 			prev_id = '.'.join(parts[0:DRSlen])
-			instance_id = '.'.join(parts[0:DRSlen - 1] + [str(newvers)])
+			instance_id = '.'.join(parts[0:DRSlen - 1] + ['v' + str(newvers)])
 			d['prev_id'] = prev_id
 		else:
 			instance_id = '.'.join(parts[0:DRSlen])
@@ -60,9 +60,12 @@ def gen_xml(fn, d):
 	f.write("</doc>\n")
 	f.close()
 
-def gen_hide_xml(id):
+def gen_hide_xml(id, *args):
+        pp = ""
+        if len(args) > 0:
+                pp = args[0]
 
-	f = open(id + ".prev.xml", 'w')
+	f = open(pp + id + ".prev.xml", 'w')
 	txt =  """<updates core="datasets" action="set">
 	   <update>
 	      <query>instance_id={}</query>
@@ -86,7 +89,7 @@ if len(sys.argv) > 2:
 	path_prefix = sys.argv[2]
 
 for rec in d:
-	gen_hide_xml(rec['prev_id'])
+	gen_hide_xml(rec['prev_id'], path_prefix)
 	gen_xml(path_prefix+rec['instance_id'] + '.xml', rec)
 
 
