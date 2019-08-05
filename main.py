@@ -24,6 +24,7 @@ def main(indexNode):
         handlers=[rotater]
     )
 
+
     qe = QueryEngine('postgresql://dbsuper:{}@localhost/esgcet'.format(dbpass))
   
     my_subs = [
