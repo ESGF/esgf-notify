@@ -1,4 +1,4 @@
-
+import datetime
 
 DRS = { 'CMIP6' : [ 'mip_era' , 'activity_drs','institution_id','source_id','experiment_id','member_id','table_id','variable_id','grid_label', 'version' ] }
 
@@ -52,20 +52,28 @@ def list_to_json(in_arr, node, **kwargs):
 	return ret
 
 
-def gen_xml(fn, d):
-	f=open(fn,'w')
-	f.write("<doc>\n")
+def gen_xml(d):
+	out = []
+	out.append("<doc>\n")
 	for key in d:
-		f.write('  <field name="{}">{}</field>\n'.format(key, d[key]))
-	f.write("</doc>\n")
-	f.close()
+		out.append('  <field name="{}">{}</field>\n'.format(key, d[key]))
+	out.append("</doc>\n")
+	return ''.join(out)
+
+def write_xml(fn, txt, *args)
+    pp = ""
+    if len(args) > 0:
+            pp = args[0]
+	with f as open(pp + '/' + fn, 'w'):
+		f.write(txt)
+
 
 def gen_hide_xml(id, *args):
-        pp = ""
-        if len(args) > 0:
-                pp = args[0]
 
-	f = open(pp + id + ".prev.xml", 'w')
+
+	dateFormat = "%Y-%m-%dT%H:%M:%SZ"
+    now = datetime.utcnow()
+    ts = now.strftime(dateFormat)
 	txt =  """<updates core="datasets" action="set">
 	   <update>
 	      <query>instance_id={}</query>
@@ -75,21 +83,28 @@ def gen_hide_xml(id, *args):
 	   </update>
 	</updates>
 	\n""".format(id)
-	f.write(txt)
-	f.close()
+
+	return txt
 
 import sys
 
-d = list_to_json(get_rand_lines(sys.stdin, int(sys.argv[1])), 'esgf-test-data.llnl.gov', increment=True)
+def main():
+	d = list_to_json(get_rand_lines(sys.stdin, int(sys.argv[1])), 'esgf-test-data.llnl.gov', increment=True)
 
-path_prefix = ""
+	path_prefix = ""
 
-if len(sys.argv) > 2:
+	if len(sys.argv) > 2:
 
-	path_prefix = sys.argv[2]
+		path_prefix = sys.argv[2]
 
-for rec in d:
-	gen_hide_xml(rec['prev_id'], path_prefix)
-	gen_xml(path_prefix+rec['instance_id'] + '.xml', rec)
+	for rec in d:
+		gen_hide_xml(rec['prev_id'], path_prefix)
+		gen_xml(path_prefix+rec['instance_id'] + '.xml', rec)
+
+
+
+if __name__ == '__main__':
+	main()
+
 
 
