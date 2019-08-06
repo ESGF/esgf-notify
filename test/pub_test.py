@@ -24,6 +24,8 @@ def main(args):
 		new_xml = list2json.gen_xml(rec)
 		upd_xml = list2json.gen_hide_xml(rec['prev_id'])
 
+		pubCli.update(upd_xml)
+		pubCli.publish(new_xml)
 
 if __name__ == '__main__':
 	main(sys.argv)
