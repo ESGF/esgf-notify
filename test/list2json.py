@@ -80,9 +80,12 @@ def gen_hide_xml(id, *args):
 	      <field name="latest">
 	         <value>false</value>
 	      </field>
+	      <field name="_timestamp">
+	         <value>{}</value>
+	      </field>
 	   </update>
 	</updates>
-	\n""".format(id)
+	\n""".format(id, ts)
 
 	return txt
 
