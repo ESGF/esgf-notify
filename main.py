@@ -12,7 +12,7 @@ import time, sys
 
 def main(indexNode):
 
-    with f as open('/esg/config/.esg_pg_pass'):
+    with open('/esg/config/.esg_pg_pass') as f:
         dbpass = f.read().rstrip()
 
     # Logging

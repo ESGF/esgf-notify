@@ -24,7 +24,7 @@ class Query(object):
         # Setup default parameters
 #        dateFormat = "%Y-%m-%dT%H:%M:%SZ"
 #        now = datetime.utcnow()
-        self.start =  'NOW-24DAYS' #now.strftime(dateFormat)
+        self.start =  'NOW-24HOURS' #now.strftime(dateFormat)
         self.stop = 'NOW' #(now - timedelta(days=interval)).strftime(dateFormat)
 
         self.defaultParams = '&wt=json&shards=%s' % shards
