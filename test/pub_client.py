@@ -9,15 +9,20 @@ class publisherClient(object):
 
         urlbase = 'https://{}/esg-search/ws'.format(hostname)
 
-        retractUrl = '{}/retract'.format(urlbase)
-        updateUrl = '{}/update'.format(urlbase)
-        publishUrl = '{}/publish'.format(urlbase)
+        self.retractUrl = '{}/retract'.format(urlbase)
+        self.updateUrl = '{}/update'.format(urlbase)
+        self.publishUrl = '{}/publish'.format(urlbase)
 
+    def post_data(self, url, data):
+        resp =  requests.post(url, data=data, cert=(self.certFile, self.keyFile), \
+verify=False, allow_redirects=True)
+        print(resp.text)
+        return resp
 
     def publish(self, xmldata):
 
         try:
-            response = requests.post(self.publishUrl, data=xmldata, cert=(self.certFile, self.keyFile), verify=False, allow_redirects=True)
+            response = self.post_data(self.publishUrl, xmldata)
         except requests.exceptions.SSLError as e:
             print("SSL error!", e )
         except Exception as e:
@@ -26,7 +31,8 @@ class publisherClient(object):
     def update(self, xmldata):
 
         try:
-            response = requests.post(self.retractUrl, data=xmldata, cert=(self.certFile, self.keyFile), verify=False, allow_redirects=True)
+            response = self.post_data(self.updateUrl, xmldata)
+
         except requests.exceptions.SSLError as e:
             print("SSL error!", e )
         except Exception as e:
@@ -36,7 +42,7 @@ class publisherClient(object):
         data = { 'id' : object_id }
 
         try:
-            response = requests.post(self.retractUrl, data=data, cert=(self.certFile, self.keyFile), verify=False, allow_redirects=True)
+            response = self.post_data(self.retractUrl, data)
         except requests.exceptions.SSLError as e:
             print("SSL error!", e )
         except Exception as e:

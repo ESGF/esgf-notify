@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 DRS = { 'CMIP6' : [ 'mip_era' , 'activity_drs','institution_id','source_id','experiment_id','member_id','table_id','variable_id','grid_label', 'version' ] }
 
@@ -60,21 +60,13 @@ def gen_xml(d):
 	out.append("</doc>\n")
 	return ''.join(out)
 
-def write_xml(fn, txt, *args)
-    pp = ""
-    if len(args) > 0:
-            pp = args[0]
-	with f as open(pp + '/' + fn, 'w'):
-		f.write(txt)
-
 
 def gen_hide_xml(id, *args):
 
-
-	dateFormat = "%Y-%m-%dT%H:%M:%SZ"
+    dateFormat = "%Y-%m-%dT%H:%M:%SZ"
     now = datetime.utcnow()
     ts = now.strftime(dateFormat)
-	txt =  """<updates core="datasets" action="set">
+    txt =  """<updates core="datasets" action="set">
 	   <update>
 	      <query>instance_id={}</query>
 	      <field name="latest">
@@ -87,7 +79,7 @@ def gen_hide_xml(id, *args):
 	</updates>
 	\n""".format(id, ts)
 
-	return txt
+    return txt
 
 import sys
 
