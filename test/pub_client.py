@@ -18,24 +18,29 @@ class publisherClient(object):
 
         try:
             response = requests.post(self.publishUrl, data=xmldata, cert=(self.certFile, self.keyFile), verify=False, allow_redirects=True)
-        except requests.exceptions.SSLError, e:
-            print("error!", e )
+        except requests.exceptions.SSLError as e:
+            print("SSL error!", e )
+        except Exception as e:
+            print("Some other error!", e )
 
     def update(self, xmldata):
 
         try:
             response = requests.post(self.retractUrl, data=xmldata, cert=(self.certFile, self.keyFile), verify=False, allow_redirects=True)
-        except requests.exceptions.SSLError, e:
-            print("error!", e )
+        except requests.exceptions.SSLError as e:
+            print("SSL error!", e )
+        except Exception as e:
+            print("Some other error!", e )
 
     def retract(self, object_id):
         data = { 'id' : object_id }
 
         try:
             response = requests.post(self.retractUrl, data=data, cert=(self.certFile, self.keyFile), verify=False, allow_redirects=True)
-        except requests.exceptions.SSLError, e:
-            print("error!", e )
-
+        except requests.exceptions.SSLError as e:
+            print("SSL error!", e )
+        except Exception as e:
+            print("Some other error!", e )
         # root = etree.fromstring(response.content)
         # text = root[0].text
         # return (response.status_code, text)
