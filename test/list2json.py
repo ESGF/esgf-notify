@@ -60,6 +60,13 @@ def gen_xml(d):
 	out.append("</doc>\n")
 	return ''.join(out)
 
+def write_xml(fn, txt, *args):
+    pp = ""
+    if len(args) > 0:
+		pp = args[0]
+	with open(pp + '/' + fn, 'w') as f:
+		f.write(txt)
+
 
 def gen_hide_xml(id, *args):
 

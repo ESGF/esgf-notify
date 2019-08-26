@@ -10,6 +10,11 @@ import json
 import random
 import time, sys
 
+from tracking import ResultTracker
+from esgf_feedback.send_job import process_users
+
+
+
 def main(indexNode):
 
     with open('/esg/config/.esg_pg_pass') as f:
@@ -25,6 +30,8 @@ def main(indexNode):
     )
 
 
+    tracker = ResultTracker()
+
     qe = QueryEngine('postgresql://dbsuper:{}@localhost/esgcet'.format(dbpass))
   
     my_subs = [
@@ -36,8 +43,16 @@ def main(indexNode):
     start = time.time()
     my_query = Query(indexNode)
     for sub in my_subs:
+
         res = my_query.getMessages(sub)
-        print (json.dumps(res, indent=2, sort_keys=True))
+        tracker.track_results(sub.email, res)
+
+    combo_res =tracker.combine_user_res()
+
+    process_users(combo_res)
+
+# DEBUG        print (json.dumps(res, indent=2, sort_keys=True))
+
     dur = time.time() - start
     avg = dur/len(my_subs)
     print (indexNode, 'total: {}, avg: {}'.format(dur,avg))
