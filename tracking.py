@@ -5,7 +5,6 @@ class ResultTracker(object):
  	def __init__(self):
  		self.user_res_dict = {}
 
-
 	def track_results(self, user, results):
 
 		sorted_res = sorted(results, key=lambda x: (getattr(x, 'master_id'), getattr(x, 'version')))
