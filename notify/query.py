@@ -45,13 +45,7 @@ class Query(object):
         all_docs = self._docs(query)
         # Get counts of removed datasets
 
-        
-        
-
-
-        results = {}
-
-        return results
+        return all_docs
 
     def _docs(self, query, removed=False):
         fq = '&fq=type:Dataset&fq=replica:False&fq=_timestamp:[%s TO %s]' % (self.start, self.stop)
