@@ -26,7 +26,8 @@ def main(args):
 	for rec in d:
 
 		new_xml = list2json.gen_xml(rec)
-		upd_xml = list2json.gen_hide_xml(rec['prev_id'])
+		if increment_in:
+			upd_xml = list2json.gen_hide_xml(rec['prev_id'])
 
 		pubCli.update(upd_xml)
 		pubCli.publish(new_xml)
