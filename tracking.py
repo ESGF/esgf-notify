@@ -7,7 +7,8 @@ class ResultTracker(object):
 
     def track_results(self, user, results):
         """  for a user and a raw set of results,  determine the update status codes,
-         ie retractions, new versions, new datasets"""
+        ie retractions, new versions, new datasets"""
+
         sorted_res = sorted(results, key=lambda x: (getattr(x, 'master_id'), getattr(x, 'version')))
         outres = []
 

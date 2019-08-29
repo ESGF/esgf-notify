@@ -44,7 +44,8 @@ def main(indexNode):
     for sub in my_subs:
 
         res = my_query.getMessages(sub)
-        tracker.track_results(sub.email, res)
+        if len(res) > 0:
+            tracker.track_results(sub.email, res)
 
     combo_res =tracker.combine_user_res()
 
