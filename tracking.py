@@ -66,6 +66,6 @@ class ResultTracker(object):
 
         for user in user_res_dict:
 
-            outdict[user_res_dict] = [x for y in user_res_dict[user] for x in y]
+            outdict[user] = [x for y in user_res_dict[user] for x in y]
 
         return outdict

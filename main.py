@@ -14,7 +14,6 @@ from tracking import ResultTracker
 from esgf_feedback.send_job import process_users
 
 
-
 def main(indexNode):
 
     with open('/esg/config/.esg_pg_pass') as f:
