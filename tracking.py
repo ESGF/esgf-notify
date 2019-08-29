@@ -9,11 +9,12 @@ class ResultTracker(object):
         """  for a user and a raw set of results,  determine the update status codes,
         ie retractions, new versions, new datasets"""
 
-        sorted_res = sorted(results, key=lambda x: (getattr(x, 'master_id'), getattr(x, 'version')))
+        sorted_res = sorted(results, key=lambda x: (x['master_id'], x['version']))
         outres = []
 
         next_i = 0
 
+        print(sorted_res)
         for i, item in enumerate(sorted_res):
 
         	# skip ahead if we have compared the current item to the previous

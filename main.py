@@ -44,12 +44,14 @@ def main(indexNode):
     for sub in my_subs:
 
         res = my_query.getMessages(sub)
+
         if len(res) > 0:
             tracker.track_results(sub.email, res)
 
     combo_res =tracker.combine_user_res()
 
-    process_users(combo_res)
+    print(combo_res)
+#    process_users(combo_res)
 
 # DEBUG        print (json.dumps(res, indent=2, sort_keys=True))
 
