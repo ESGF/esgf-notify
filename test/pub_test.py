@@ -2,7 +2,11 @@ from pub_client import publisherClient
 
 import list2json, sys
 
-ARGS = 3
+hostname = "pcmdi8vm.llnl.gov"
+cert_fn = "cert.pem"
+increment_in = False
+
+ARGS = 1
 
 def main(args):
 
@@ -11,11 +15,11 @@ def main(args):
 		exit(0)
 
 
-	pubcount = int(args[2])
-	hostname = args[1]
-	cert_fn = args[3]
+	pubcount = int(args[1])
+#	hostname = args[1]
+#	cert_fn = args[3]
 
-	d = list2json.list_to_json(list2json.get_rand_lines(sys.stdin, pubcount), hostname, increment=True)
+	d = list2json.list_to_json(list2json.get_rand_lines(sys.stdin, pubcount), hostname, increment=increment_in)
 
 	pubCli = publisherClient(cert_fn, hostname)
 
