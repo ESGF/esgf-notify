@@ -36,7 +36,7 @@ class ResultTracker(object):
                 while do_loop:
                     tmp_i = next_i + 1
                     if tmp_i == len(sorted_res):
-                        continue
+                        break
 
                     next_item = sorted_res[tmp_i]
                     if latest_master == next_item["master_id"]:
