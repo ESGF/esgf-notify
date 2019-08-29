@@ -63,9 +63,9 @@ def gen_xml(d):
 def write_xml(fn, txt, *args):
     pp = ""
     if len(args) > 0:
-		pp = args[0]
-	with open(pp + '/' + fn, 'w') as f:
-		f.write(txt)
+        pp = args[1]
+    with open(pp + '/' + fn, 'w') as f:
+        f.write(txt)
 
 
 def gen_hide_xml(id, *args):
@@ -74,17 +74,17 @@ def gen_hide_xml(id, *args):
     now = datetime.utcnow()
     ts = now.strftime(dateFormat)
     txt =  """<updates core="datasets" action="set">
-	   <update>
-	      <query>instance_id={}</query>
-	      <field name="latest">
-	         <value>false</value>
-	      </field>
-	      <field name="_timestamp">
-	         <value>{}</value>
-	      </field>
-	   </update>
-	</updates>
-	\n""".format(id, ts)
+        <update>
+          <query>instance_id={}</query>
+          <field name="latest">
+             <value>false</value>
+          </field>
+          <field name="_timestamp">
+             <value>{}</value>
+          </field>
+        </update>
+    </updates>
+    \n""".format(id, ts)
 
     return txt
 
