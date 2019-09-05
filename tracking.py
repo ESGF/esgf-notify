@@ -1,5 +1,7 @@
 # comment....
 
+import pdb
+
 class ResultTracker(object):
     """docstring f ResultTrackerme"""
     def __init__(self):
@@ -8,13 +10,15 @@ class ResultTracker(object):
     def track_results(self, user, results):
         """  for a user and a raw set of results,  determine the update status codes,
         ie retractions, new versions, new datasets"""
-
-        sorted_res = sorted(results, key=lambda x: (x['master_id'], x['version']))
+        print ("Raw results: {}".format(len(results)))
+        sorted_res = sorted(results, key=lambda x: (x['master_id'], x['version']), reverse=True )
         outres = []
 
         next_i = 0
 
-        print(sorted_res)
+#        pdb.set_trace()
+
+#        print(user, sorted_res)
         for i, item in enumerate(sorted_res):
 
         	# skip ahead if we have compared the current item to the previous
@@ -37,6 +41,9 @@ class ResultTracker(object):
                 while do_loop:
                     tmp_i = next_i + 1
                     if tmp_i == len(sorted_res):
+                        if not appended:
+                            item["update_status"] = "new-dataset"
+                            outres.append(item)                            
                         break
 
                     next_item = sorted_res[tmp_i]
@@ -52,7 +59,7 @@ class ResultTracker(object):
                             outres.append(item)
                             break
                     next_i += 1
-
+        
         if user in self.user_res_dict:
             tmp = self.user_res_dict[user]
             tmp.append(outres)
@@ -71,5 +78,6 @@ class ResultTracker(object):
         for user in user_res_dict:
 
             outdict[user] = [x for y in user_res_dict[user] for x in y]
-
+            print ("combined results: {}".format(len(outdict[user])))
+        
         return outdict

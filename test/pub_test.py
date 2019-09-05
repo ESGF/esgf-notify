@@ -4,7 +4,7 @@ import list2json, sys
 
 hostname = "pcmdi8vm.llnl.gov"
 cert_fn = "cert.pem"
-increment_in = False
+increment_in = True
 
 ARGS = 1
 

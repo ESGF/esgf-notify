@@ -16,7 +16,7 @@ class QueryEngine():
 
 		session = self.Session()
 
-		self.query_res = session.query(ESGFSubscribers,ESGFUser.email,ESGFTerms.keyname,ESGFTerms.valuename).join(ESGFUser).join(ESGFTerms)
+		self.query_res = session.query(ESGFSubscribers,ESGFUser.email,ESGFTerms.keyname,ESGFTerms.valuename).join(ESGFUser).join(ESGFTerms).order_by(ESGFSubscribers.id)
 		session.close()
 
 	def get_rows(self):
