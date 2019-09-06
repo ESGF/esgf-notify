@@ -16,6 +16,8 @@ from esgf_feedback.send_job import process_users
 HOSTNAME='pcmdi8vm.llnl.gov'
 QPERIOD='2DAYS'
 LATEST=False
+DEBUG=True
+MAIL=False
 
 def main(indexNode):
 
@@ -56,17 +58,20 @@ def main(indexNode):
             # In the latest case we are just looking for all datasets matching criteria
             if latest:
 
-                tmp_res.append(res)
+                tmp_res.append("{}.v{}".format(res["master_id"],res["vesion"])
             else:  # we are tracking results
                 tracker.track_results(sub.email, res)
 
     if latest:
         combo_res = [x for y in tmp_res for x in y]
+        print("\n".join(combo_res))
+        print('')
     else:
         combo_res =tracker.combine_user_res()
-
-    print(combo_res)
-#    process_users(combo_res)
+        if DEBUG:
+            print combo_res
+        if MAIL:
+            process_users(combo_res)
 
 # DEBUG        print (json.dumps(res, indent=2, sort_keys=True))
 
