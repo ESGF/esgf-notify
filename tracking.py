@@ -19,7 +19,7 @@ class ResultTracker(object):
         for i, item in enumerate(sorted_res):
 
         	# skip ahead if we have compared the current item to the previous
-            pdb.set_trace()
+#            pdb.set_trace()
 
             if item["retracted"]:
 
