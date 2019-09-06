@@ -14,6 +14,8 @@ from tracking import ResultTracker
 from esgf_feedback.send_job import process_users
 
 HOSTNAME='pcmdi8vm.llnl.gov'
+QPERIOD='2DAYS'
+LATEST=False
 
 def main(indexNode):
 
@@ -41,15 +43,27 @@ def main(indexNode):
         for i,x in enumerate(qe.get_rows())
     ]
     start = time.time()
-    my_query = Query(indexNode)
+
+    my_query = Query(indexNode, interval=QPERIOD)
+
+    tmp_res = []
     for sub in my_subs:
 
-        res = my_query.getMessages(sub)
+        res = my_query.getMessages(sub, latest=LATEST)
 
         if len(res) > 0:
-            tracker.track_results(sub.email, res)
 
-    combo_res =tracker.combine_user_res()
+            # In the latest case we are just looking for all datasets matching criteria
+            if latest:
+
+                tmp_res.append(res)
+            else:  # we are tracking results
+                tracker.track_results(sub.email, res)
+
+    if latest:
+        combo_res = [x for y in tmp_res for x in y]
+    else:
+        combo_res =tracker.combine_user_res()
 
     print(combo_res)
 #    process_users(combo_res)
