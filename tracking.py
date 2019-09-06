@@ -16,9 +16,6 @@ class ResultTracker(object):
 
         next_i = 0
 
-#        pdb.set_trace()
-
-#        print(user, sorted_res)
         for i, item in enumerate(sorted_res):
 
         	# skip ahead if we have compared the current item to the previous
