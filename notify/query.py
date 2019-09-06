@@ -5,12 +5,9 @@ import requests
 from operator import add
 from functools import reduce
 
-#QPERIOD='24HOURS'
-QPERIOD='7DAYS'
-
 class Query(object):
 
-    def __init__(self, indexNode, interval=7):
+    def __init__(self, indexNode, interval='7DAYS'):
         self.log = logging.getLogger(__name__)
         self.esgSearchPath = 'https://%s/esg-search/search' % indexNode
         self.solrPath = 'https://%s/solr/datasets/select' % indexNode
@@ -28,13 +25,13 @@ class Query(object):
 #        dateFormat = "%Y-%m-%dT%H:%M:%SZ"
 #        now = datetime.utcnow()
 #        self.start =  'NOW-24HOURS' #now.strftime(dateFormat)
-        self.start =  'NOW-{}'.format(QPERIOD) #now.strftime(dateFormat)
+        self.start =  'NOW-{}'.format(interval) #now.strftime(dateFormat)
         self.stop = 'NOW' #(now - timedelta(days=interval)).strftime(dateFormat)
 
         self.defaultParams = '&wt=json&shards=%s' % shards
         
 
-    def getMessages(self, sub):
+    def getMessages(self, sub, latest=False):
 
         # Build query for each subscriber
         # This is putting it into Solr's query format
@@ -51,11 +48,11 @@ class Query(object):
 
         return all_docs
 
-    def _docs(self, query, removed=False):
+    def _docs(self, query, latest=False):
         fq = '&fq=type:Dataset&fq=replica:False&fq=_timestamp:[%s TO %s]' % (self.start, self.stop)
         # Simply add the redacted qualifier to see removals
-        if removed:
-            fq += '&fq=latest:False'
+        if latest:
+            fq += '&fq=latest:True'
 
         ret_fields = ['master_id', 'version', 'latest', 'retracted']
 

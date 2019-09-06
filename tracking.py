@@ -10,7 +10,7 @@ class ResultTracker(object):
     def track_results(self, user, results):
         """  for a user and a raw set of results,  determine the update status codes,
         ie retractions, new versions, new datasets"""
-        print ("Raw results: {}".format(len(results)))
+        #print ("Raw results: {}".format(len(results)))
         sorted_res = sorted(results, key=lambda x: (x['master_id'], x['version']), reverse=True )
         outres = []
 
@@ -77,6 +77,6 @@ class ResultTracker(object):
         for user in user_res_dict:
 
             outdict[user] = [x for y in user_res_dict[user] for x in y]
-            print ("combined results: {}".format(len(outdict[user])))
+            #print ("combined results: {}".format(len(outdict[user])))
         
         return outdict
