@@ -14,8 +14,8 @@ from tracking import ResultTracker
 from esgf_feedback.send_job import process_users
 
 HOSTNAME='pcmdi8vm.llnl.gov'
-QPERIOD='2DAYS'
-LATEST=False
+QPERIOD='60DAYS'
+LATEST=True
 
 def main(indexNode):
 
