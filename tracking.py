@@ -16,12 +16,13 @@ class ResultTracker(object):
 
         next_i = 0
 
-#        pdb.set_trace()
+
 
 #        print(user, sorted_res)
         for i, item in enumerate(sorted_res):
 
         	# skip ahead if we have compared the current item to the previous
+            pdb.set_trace()
 
             if item["retracted"]:
 
@@ -57,7 +58,8 @@ class ResultTracker(object):
                         if not appended:
                             item["update_status"] = "new-dataset"
                             outres.append(item)
-                            break
+                     break
+                        
                     next_i += 1
         
         if user in self.user_res_dict:
