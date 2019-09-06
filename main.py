@@ -13,6 +13,7 @@ import time, sys
 from tracking import ResultTracker
 from esgf_feedback.send_job import process_users
 
+HOSTNAME='pcmdi8vm.llnl.gov'
 
 def main(indexNode):
 
@@ -60,7 +61,8 @@ def main(indexNode):
     print (indexNode, 'total: {}, avg: {}'.format(dur,avg))
 
 
-if (len(sys.argv) < 2):
-    print ("missing required indexNode arguement")
+#if (len(sys.argv) < 2):
+#    print ("missing required indexNode arguement")
 
-main(sys.argv[1])
+#main(sys.argv[1])
+main(HOSTNAME)

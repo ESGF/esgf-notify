@@ -5,7 +5,8 @@ import requests
 from operator import add
 from functools import reduce
 
-QPERIOD='24HOURS'
+#QPERIOD='24HOURS'
+QPERIOD='7DAYS'
 
 class Query(object):
 
