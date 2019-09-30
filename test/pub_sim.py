@@ -2,6 +2,8 @@ import list2json, sys, os, json, random
 from time import time, sleep
 from datetime import date, timedelta
 
+from pub_client import publisherClient
+
 if len(sys.argv) < 4:
     print("Usage: python pub-sim-2.py /path/to/datasets <count> <interval>")
     print("<count> = number of datasets to publish")
