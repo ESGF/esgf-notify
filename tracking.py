@@ -16,15 +16,19 @@ class ResultTracker(object):
 
         next_i = 0
 
+#        print (str(sorted_res).replace('},','},\n'))
+#        exit(0)
         for i, item in enumerate(sorted_res):
 
         	# skip ahead if we have compared the current item to the previous
 #            pdb.set_trace()
 
             if item["retracted"]:
-
+                
+                assert (not item["latest"])
                 item["update_status"] = "new-retraction"
                 outres.append(item)
+                continue
 
             # move past the items that we scanned
             if  i < next_i:
@@ -51,6 +55,9 @@ class ResultTracker(object):
                         if not appended:
                             outres.append(item)
                             appended = True
+                        if next_item["retractd"]:
+                            next_item["update_status"] = "new-retracton"
+                            outres.append(next_item)
                     else:
                         if not appended:
                             item["update_status"] = "new-dataset"

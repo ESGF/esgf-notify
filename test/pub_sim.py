@@ -1,4 +1,4 @@
-import list2json, sys, os, json
+import list2json, sys, os, json, random
 from time import time, sleep
 from datetime import date, timedelta
 
@@ -15,16 +15,6 @@ hostname = "pcmdi8vm.llnl.gov"
 cert_fn = "cert.pem"
 
 rnd = random.random
-DCOUNT = len(dset_list)
-dsarr = list(range(DCOUNT))
-p_count = 0
-
-for i in range(DCOUNT):
-
-    x = int(rnd()* DCOUNT )
-    tmp = dsarr[i]
-    dsarr[i] = dsarr[x]
-    dsarr[x] = tmp
 
 pub_list = []
 PERIOD = 4  # Count per period
@@ -40,6 +30,18 @@ def main():
 
 
     dsetjson = list2json.list_to_json(open(sys.argv[1]), hostname, false)
+
+    DCOUNT = len(dset_list)
+
+    dsarr = list(range(DCOUNT))
+    p_count = 0
+
+    for i in range(DCOUNT):
+
+        x = int(rnd()* DCOUNT )
+        tmp = dsarr[i]
+        dsarr[i] = dsarr[x]
+        dsarr[x] = tmp
 
     pubCli = publisherClient(cert_fn, hostname)
     print("running main")

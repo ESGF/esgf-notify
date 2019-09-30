@@ -5,7 +5,7 @@ import list2json, sys
 hostname = "pcmdi8vm.llnl.gov"
 cert_fn = "cert.pem"
 increment_in = False
-retract = False
+retract = True
 
 ARGS = 1
 
@@ -25,7 +25,8 @@ def main(args):
     if retract:
 
         for dset in list2json.get_rand_lines(sys.stdin, pubcount):
-            dset_id = "{}|{}".format(dset, hostname)
+            print('\"{}\"'.format(dset.strip()))
+            dset_id = "{}|{}".format(dset.strip(), hostname)
             pubCli.retract(dset_id)
     else:
         d = list2json.list_to_json(list2json.get_rand_lines(sys.stdin, pubcount), hostname, increment=increment_in)

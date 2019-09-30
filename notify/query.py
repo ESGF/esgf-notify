@@ -54,7 +54,7 @@ class Query(object):
         if latest:
             fq += '&fq=latest:True'
 
-        ret_fields = ['master_id', 'version', 'latest', 'retracted']
+        ret_fields = ['master_id', 'version', 'latest', 'retracted', '_timestamp']
 
         fl = '&'.join([ "fl=%s" % x for x in  ret_fields])
 

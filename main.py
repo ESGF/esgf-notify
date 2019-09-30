@@ -14,8 +14,9 @@ from tracking import ResultTracker
 from esgf_feedback.send_job import process_users
 
 HOSTNAME='pcmdi8vm.llnl.gov'
-QPERIOD='60DAYS'
-LATEST=True
+#QPERIOD='5DAYS'
+QPERIOD='20HOURS'
+LATEST=False
 DEBUG=True
 MAIL=False
 
@@ -70,7 +71,8 @@ def main(indexNode):
     else:
         combo_res =tracker.combine_user_res()
         if DEBUG:
-            print(combo_res)
+            outstr = str(combo_res).replace('},', '},\n')
+            print(outstr)
         if MAIL:
             process_users(combo_res)
 
