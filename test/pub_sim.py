@@ -31,9 +31,9 @@ def main():
     #     dset_list.append(line.rstrip()) 
 
 
-    dsetjson = list2json.list_to_json(open(sys.argv[1]), hostname, false)
+    dsetjson = list2json.list_to_json(open(sys.argv[1]), hostname, increment=False)
 
-    DCOUNT = len(dset_list)
+    DCOUNT = len(dsetjson)
 
     dsarr = list(range(DCOUNT))
     p_count = 0
@@ -56,7 +56,7 @@ def main():
         starttime = time()
 
         if i < BASE:
-            dset = dset_list[idx]
+            dset = dsetjson[idx]
             dsetid = dset["instance_id"]
             new_xml = list2json.gen_xml(dset)
             pubCli.publish(new_xml)
@@ -66,7 +66,7 @@ def main():
         else:
             if i % PERIOD <  (PERIOD -2):
 
-                dset = dset_list[idx]
+                dset = dsetjson[idx]
                 dsetid = dset["instance_id"]
                 new_xml = list2json.gen_xml(dset)
                 pubCli.publish(new_xml)
