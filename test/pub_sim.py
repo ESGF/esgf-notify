@@ -35,7 +35,7 @@ def main():
     #     dset_list.append(line.rstrip()) 
 
 
-    dsetjson = list2json.list_to_json(open(sys.argv[1]), hostname, false)
+    dsetjson = list2json.list_to_json(open(sys.argv[1]), hostname, increment=False)
 
     DCOUNT = len(dsetjson)
 
