@@ -134,7 +134,7 @@ def main():
                     ret_str = "A-New-Retraction"
                     quick_retract= choice
                     
-                dset_rec = pub_list[choice]
+                    dset_rec = pub_list[choice]
 
                 # dset = dset_rec["master_id"]
                 # outlst[choice]["retracted"] = True
