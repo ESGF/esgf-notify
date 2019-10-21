@@ -24,6 +24,10 @@ BASE = 2 * PERIOD # number of new-only events to complete
 DRS_LEN = 10
 quick_retract = -1
 
+def retract_id(instance_id, hostname):
+
+    return "{}|{}".format(instance_id, hostname)
+
 def main():
 
     # dset_list = []
@@ -33,7 +37,7 @@ def main():
 
     dsetjson = list2json.list_to_json(open(sys.argv[1]), hostname, false)
 
-    DCOUNT = len(dset_list)
+    DCOUNT = len(dsetjson)
 
     dsarr = list(range(DCOUNT))
     p_count = 0
@@ -56,7 +60,7 @@ def main():
         starttime = time()
 
         if i < BASE:
-            dset = dset_list[idx]
+            dset = dsetjson[idx]
             dsetid = dset["instance_id"]
             new_xml = list2json.gen_xml(dset)
             pubCli.publish(new_xml)
@@ -66,7 +70,7 @@ def main():
         else:
             if i % PERIOD <  (PERIOD -2):
 
-                dset = dset_list[idx]
+                dset = dsetjson[idx]
                 dsetid = dset["instance_id"]
                 new_xml = list2json.gen_xml(dset)
                 pubCli.publish(new_xml)
@@ -116,7 +120,14 @@ def main():
     
 
                 print(i, choice, dset_rec, "E-New-version")
-                newver  = update_dset(dset_rec[0])
+                dset = dset_rec[0]
+                updated_dset_json = list2json.list_to_json([dset], hostname, increment=True)
+                rec = retracted_dset_json[0]
+                new_xml = list2json.gen_xml(rec)
+                upd_xml = list2json.gen_hide_xml(rec['prev_id'])
+                pubCli.update(upd_xml)
+                pubCli.publish(new_xml)
+
                 pub_list[choice] = [newver, "PUB" ] 
 
             else:
@@ -134,21 +145,15 @@ def main():
                     ret_str = "A-New-Retraction"
                     quick_retract= choice
                     
-                    dset_rec = pub_list[choice]
+                dset_rec = pub_list[choice]
 
                 # dset = dset_rec["master_id"]
                 # outlst[choice]["retracted"] = True
                 # outlst[choice]["latest"] = False
 
                 # outlst[choice]["_timestamp"] = ts
-                print(i, choice, dset_rec, ret_str)
                 dset = dset_rec[0]
-                retracted_dset_json = list2json.list_to_json([dset], hostname, increment=True)
-                rec = retracted_dset_json[0]
-                new_xml = list2json.gen_xml(rec)
-                upd_xml = list2json.gen_hide_xml(rec['prev_id'])
-                pubCli.update(upd_xml)
-                pubCli.publish(new_xml)
+                pubCli.retract(retract_id(dset, hostname))
                 pub_list[choice] = [dset, "RETR"]
 
         endtime = time()
