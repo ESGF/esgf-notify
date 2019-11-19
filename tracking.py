@@ -55,7 +55,7 @@ class ResultTracker(object):
                         if not appended:
                             outres.append(item)
                             appended = True
-                        if next_item["retractd"]:
+                        if next_item["retracted"]:
                             next_item["update_status"] = "new-retracton"
                             outres.append(next_item)
                     else:

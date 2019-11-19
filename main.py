@@ -15,7 +15,7 @@ from esgf_feedback.send_job import process_users
 
 HOSTNAME='pcmdi8vm.llnl.gov'
 #QPERIOD='5DAYS'
-QPERIOD='20HOURS'
+QPERIOD='5MINUTES'
 LATEST=False
 DEBUG=True
 MAIL=False

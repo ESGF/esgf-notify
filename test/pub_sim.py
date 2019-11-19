@@ -64,7 +64,7 @@ def main():
             dsetid = dset["instance_id"]
             new_xml = list2json.gen_xml(dset)
             pubCli.publish(new_xml)
-            print(i, dsetid, "D-New-Dataset")
+            print(starttime, i, dsetid, "D-New-Dataset")
             pub_list.append([dsetid, "PUB"])
 
         else:
@@ -74,7 +74,7 @@ def main():
                 dsetid = dset["instance_id"]
                 new_xml = list2json.gen_xml(dset)
                 pubCli.publish(new_xml)
-                print(i, dsetid, "D-New-Dataset")
+                print(starttime, i, dsetid, "D-New-Dataset")
                 pub_list.append([dsetid, "PUB"])
           
 
@@ -94,7 +94,7 @@ def main():
                     if p_count == (TOT_PERIODS - 2):
 
                         if DEBUG:
-                            print("find quick new version")
+                            print(starttime, "find quick new version")
                         choice = ((TOT_PERIODS - 3) * PERIOD)
                         if DEBUG:
                             print("cat one", choice, len(pub_list)) 
@@ -104,7 +104,7 @@ def main():
                             print("find previous retraction")
                         choice =quick_retract
                         if DEBUG:
-                            print("cat two", choice, len(pub_list)) 
+                            print(starttime,"cat two", choice, len(pub_list)) 
                             print(pub_list[choice])
                         dset_rec = pub_list[choice]
                         break
@@ -119,16 +119,18 @@ def main():
 
     
 
-                print(i, choice, dset_rec, "E-New-version")
+                print(starttime,i, choice, dset_rec, "E-New-version")
                 dset = dset_rec[0]
                 updated_dset_json = list2json.list_to_json([dset], hostname, increment=True)
-                rec = retracted_dset_json[0]
+                rec = updated_dset_json[0]
+                new_ver=rec["instance_id"]
                 new_xml = list2json.gen_xml(rec)
                 upd_xml = list2json.gen_hide_xml(rec['prev_id'])
                 pubCli.update(upd_xml)
                 pubCli.publish(new_xml)
 
-                pub_list[choice] = [newver, "PUB" ] 
+                
+                pub_list[choice] = [new_ver, "PUB" ] 
 
             else:
                 assert(i % PERIOD == PERIOD -1)
@@ -138,20 +140,16 @@ def main():
                     # quick retraction
                     choice = ((TOT_PERIODS - 2) * PERIOD)
                     if DEBUG:
-                        print(choice, len(pub_list), "C-Quick-Retraction")
+                        print(starttime, choice, len(pub_list), "C-Quick-Retraction")
                     ret_str = "C-Quick-Retraction"
                 else:
                     choice = int(rnd() * (len(pub_list) -PERIOD))
                     ret_str = "A-New-Retraction"
                     quick_retract= choice
-                    
+                    if DEBUG:
+                        print(starttime, choice, len(pub_list), ret_str)
                 dset_rec = pub_list[choice]
-
-                # dset = dset_rec["master_id"]
-                # outlst[choice]["retracted"] = True
-                # outlst[choice]["latest"] = False
-
-                # outlst[choice]["_timestamp"] = ts
+                
                 dset = dset_rec[0]
                 pubCli.retract(retract_id(dset, hostname))
                 pub_list[choice] = [dset, "RETR"]
